@@ -1,0 +1,24 @@
+services:
+  db:
+    image: "postgres"
+    command: ["postgres", "-c", "log_statement=all"]
+    environment:
+      - POSTGRES_DB=development
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+  app:
+    image: python:3.11-slim-bullseye
+    command: bash
+    volumes:
+      - ".:/app"
+      - pip-data:/usr/local/lib/python3.11/site-packages
+      - bin-data:/usr/local/bin
+    depends_on:
+      - db
+
+volumes:
+  pg-data:
+  pip-data:
+  bin-data:
